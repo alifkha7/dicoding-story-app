@@ -1,0 +1,3 @@
+# 0003. Router-Managed Page Lifecycle Teardown and Skip-Link Interception
+
+Our hash-based SPA router (`App`) enforces two explicit lifecycle rules outside standard hash routing: (1) before transitioning to a new route, the router invokes a teardown hook on the active page and stops any registered `MediaStream` tracks so camera hardware never remains active after navigation; and (2) the "Skip to Content" link (`#main-content`) intercepts click/activation events via `preventDefault()` and programmatically focuses `<main tabindex="-1">` so it does not mutate `location.hash` and trigger a broken route change.
