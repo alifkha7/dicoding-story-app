@@ -4,7 +4,7 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [ ] The application shell provides semantic HTML5 landmarks (`header`, `nav`, `main`, `footer`), responsive layout tokens for `375px`, `768px`, and `1024px` viewports, and visible `:focus-visible` keyboard styles.
 - [ ] Activating the "Skip to Content" link moves keyboard focus directly to the main content region without mutating the SPA hash route or triggering an unintended route change (per ADR-0003).
