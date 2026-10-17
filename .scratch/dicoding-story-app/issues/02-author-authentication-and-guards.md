@@ -4,7 +4,7 @@
 
 **Blocked by:** 01: App Shell, Custom View Transitions, Accessibility Landmarks, & Core Models Prefactor
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [ ] Visitors can register a new **Author** account on `#/register` with name, email, and password ($\ge 8$ characters), receiving immediate accessible validation feedback and clear error or success messages before redirecting to `#/login`.
 - [ ] Registered **Authors** can sign in on `#/login` with email and password, persisting their session token and redirecting to the **Story Feed** (`#/`).
