@@ -4,7 +4,7 @@
 
 **Blocked by:** 01: App Shell, Custom View Transitions, Accessibility Landmarks, & Core Models Prefactor, 02: Author Registration, Login, Logout, & Router Auth Guard
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [ ] **Authors** can enter a **Draft Story** description and choose between *Upload File* and *Live Camera* (`getUserMedia`) modes, with every form input (`description`, file picker, camera selector, `latitude`, `longitude`) paired with an explicit `<label for="...">`.
 - [ ] In *Live Camera* mode, **Authors** can start the camera preview, switch between available video input devices, capture a photo onto a canvas preview, retake the photo, or close the camera; all active `MediaStream` tracks are stopped immediately upon photo capture, manual camera close, form submission, or route navigation away from `#/add` (per ADR-0003).
