@@ -2,13 +2,11 @@ class AddStoryPresenter {
   #view = null;
   #storyModel = null;
   #authModel = null;
-  #streamManager = null;
 
-  constructor({ view, storyModel, authModel, streamManager }) {
+  constructor({ view, storyModel, authModel }) {
     this.#view = view;
     this.#storyModel = storyModel;
     this.#authModel = authModel;
-    this.#streamManager = streamManager;
   }
 
   async submitDraftStory({ description, photoBlob, lat, lon }) {
@@ -52,11 +50,6 @@ class AddStoryPresenter {
       this.#view.showLoading();
       this.#view.clearFeedback();
 
-      // Ensure any hardware camera stream is stopped prior to sending
-      if (this.#streamManager && typeof this.#streamManager.stopAll === 'function') {
-        this.#streamManager.stopAll();
-      }
-
       const token = this.#authModel.getToken();
 
       await this.#storyModel.addStory({
@@ -75,12 +68,6 @@ class AddStoryPresenter {
       return false;
     } finally {
       this.#view.hideLoading();
-    }
-  }
-
-  handleTeardown() {
-    if (this.#streamManager && typeof this.#streamManager.stopAll === 'function') {
-      this.#streamManager.stopAll();
     }
   }
 }

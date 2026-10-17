@@ -18,8 +18,8 @@ class HomePresenter {
       this.#view.clearError();
 
       const token = this.#authModel.getToken();
-      // Fetch location=1 to obtain coordinates for map plotting
-      const response = await this.#storyModel.getStories({ token, location: 1, size: 50 });
+      // Fetch location=0 to obtain all stories, then filter client-side
+      const response = await this.#storyModel.getStories({ token, location: 0, size: 50 });
       this.#stories = response.listStory || [];
 
       this.applyFilter(this.#locationFilter);

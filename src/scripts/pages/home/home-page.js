@@ -241,6 +241,7 @@ class HomePage {
         <div class="map-popup-card">
           <img src="${story.photoUrl}" alt="Foto ${story.name}" class="popup-thumb" />
           <h3 class="popup-author">${story.name}</h3>
+          <p class="popup-coords" style="font-size: 0.75rem; color: #6b7280; margin-bottom: 4px;">📍 Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}</p>
           <p class="popup-desc">${story.description ? story.description.slice(0, 80) : ''}...</p>
           <a href="#/stories/${story.id}" class="popup-link">Lihat Detail →</a>
         </div>
@@ -266,10 +267,22 @@ class HomePage {
       card.classList.remove('active-story');
     });
 
+    // Reset marker styles
+    this.#markerMap.forEach((marker) => {
+      if (marker._icon) {
+        marker._icon.style.filter = '';
+      }
+    });
+
     const activeCard = document.querySelector(`#story-card-${storyId}`);
     if (activeCard) {
       activeCard.classList.add('active-story');
       activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    const activeMarker = this.#markerMap.get(storyId);
+    if (activeMarker && activeMarker._icon) {
+      activeMarker._icon.style.filter = 'drop-shadow(0 0 8px #ff3b30) hue-rotate(140deg)';
     }
   }
 

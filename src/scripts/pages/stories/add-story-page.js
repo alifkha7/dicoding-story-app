@@ -160,7 +160,6 @@ class AddStoryPage {
       view: this,
       storyModel,
       authModel,
-      streamManager: StreamManager,
     });
 
     this.#setupMapPicker();
@@ -328,6 +327,35 @@ class AddStoryPage {
     const video = document.querySelector('#camera-video');
     const videoWrapper = document.querySelector('.video-preview-wrapper');
     const select = document.querySelector('#camera-device-select');
+
+    select?.addEventListener('change', async () => {
+      if (this.#currentStream) {
+        // If camera is currently active, switch immediately to selected device
+        const deviceId = select.value;
+        try {
+          this.#stopCamera();
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: deviceId ? { deviceId: { exact: deviceId } } : true,
+          });
+          this.#currentStream = stream;
+          StreamManager.register(stream);
+
+          const video = document.querySelector('#camera-video');
+          const videoWrapper = document.querySelector('.video-preview-wrapper');
+          const btnStart = document.querySelector('#btn-start-camera');
+          const btnCapture = document.querySelector('#btn-capture-camera');
+          const btnClose = document.querySelector('#btn-close-camera');
+
+          if (video) video.srcObject = stream;
+          if (videoWrapper) videoWrapper.style.display = 'block';
+          if (btnStart) btnStart.style.display = 'none';
+          if (btnCapture) btnCapture.style.display = 'inline-flex';
+          if (btnClose) btnClose.style.display = 'inline-flex';
+        } catch (err) {
+          this.showError('Gagal beralih ke perangkat kamera yang dipilih.');
+        }
+      }
+    });
 
     btnStart?.addEventListener('click', async () => {
       const deviceId = select?.value;
@@ -504,7 +532,8 @@ class AddStoryPage {
 
   destroy() {
     this.#stopCamera();
-    this.#presenter.handleTeardown();
+    this.#capturedBlob = null;
+    this.#hideImagePreview();
     if (this.#pickerMarker) {
       this.#pickerMarker.remove();
       this.#pickerMarker = null;

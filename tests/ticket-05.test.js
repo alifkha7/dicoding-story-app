@@ -5,7 +5,6 @@ describe('Ticket 05 Unit Tests — AddStoryPresenter', () => {
   let fakeView;
   let fakeStoryModel;
   let fakeAuthModel;
-  let fakeStreamManager;
 
   const validPhoto = {
     size: 500 * 1024, // 500 KB (< 1 MB)
@@ -34,10 +33,6 @@ describe('Ticket 05 Unit Tests — AddStoryPresenter', () => {
     fakeAuthModel = {
       getToken: vi.fn().mockReturnValue('mock-token-secret'),
     };
-
-    fakeStreamManager = {
-      stopAll: vi.fn(),
-    };
   });
 
   it('should validate empty description', async () => {
@@ -45,7 +40,6 @@ describe('Ticket 05 Unit Tests — AddStoryPresenter', () => {
       view: fakeView,
       storyModel: fakeStoryModel,
       authModel: fakeAuthModel,
-      streamManager: fakeStreamManager,
     });
 
     const result = await presenter.submitDraftStory({
@@ -65,7 +59,6 @@ describe('Ticket 05 Unit Tests — AddStoryPresenter', () => {
       view: fakeView,
       storyModel: fakeStoryModel,
       authModel: fakeAuthModel,
-      streamManager: fakeStreamManager,
     });
 
     const result = await presenter.submitDraftStory({
@@ -85,7 +78,6 @@ describe('Ticket 05 Unit Tests — AddStoryPresenter', () => {
       view: fakeView,
       storyModel: fakeStoryModel,
       authModel: fakeAuthModel,
-      streamManager: fakeStreamManager,
     });
 
     const result = await presenter.submitDraftStory({
@@ -105,7 +97,6 @@ describe('Ticket 05 Unit Tests — AddStoryPresenter', () => {
       view: fakeView,
       storyModel: fakeStoryModel,
       authModel: fakeAuthModel,
-      streamManager: fakeStreamManager,
     });
 
     const result = await presenter.submitDraftStory({
@@ -125,7 +116,6 @@ describe('Ticket 05 Unit Tests — AddStoryPresenter', () => {
       view: fakeView,
       storyModel: fakeStoryModel,
       authModel: fakeAuthModel,
-      streamManager: fakeStreamManager,
     });
 
     const result = await presenter.submitDraftStory({
@@ -140,14 +130,13 @@ describe('Ticket 05 Unit Tests — AddStoryPresenter', () => {
     expect(fakeStoryModel.addStory).not.toHaveBeenCalled();
   });
 
-  it('should submit successfully, stop camera stream tracks, and redirect to home', async () => {
+  it('should submit successfully and redirect to home', async () => {
     fakeStoryModel.addStory.mockResolvedValue({ error: false, message: 'success' });
 
     const presenter = new AddStoryPresenter({
       view: fakeView,
       storyModel: fakeStoryModel,
       authModel: fakeAuthModel,
-      streamManager: fakeStreamManager,
     });
 
     const result = await presenter.submitDraftStory({
@@ -158,7 +147,6 @@ describe('Ticket 05 Unit Tests — AddStoryPresenter', () => {
     });
 
     expect(result).toBe(true);
-    expect(fakeStreamManager.stopAll).toHaveBeenCalled();
     expect(fakeStoryModel.addStory).toHaveBeenCalledWith({
       token: 'mock-token-secret',
       description: 'Pemandangan indah saat bootcamp.',
@@ -169,17 +157,5 @@ describe('Ticket 05 Unit Tests — AddStoryPresenter', () => {
     expect(fakeView.showSuccess).toHaveBeenCalledWith(expect.stringContaining('berhasil dibagikan'));
     expect(fakeView.navigateToHome).toHaveBeenCalled();
     expect(fakeView.hideLoading).toHaveBeenCalled();
-  });
-
-  it('should invoke streamManager.stopAll upon teardown (ADR-0003)', () => {
-    const presenter = new AddStoryPresenter({
-      view: fakeView,
-      storyModel: fakeStoryModel,
-      authModel: fakeAuthModel,
-      streamManager: fakeStreamManager,
-    });
-
-    presenter.handleTeardown();
-    expect(fakeStreamManager.stopAll).toHaveBeenCalledTimes(1);
   });
 });

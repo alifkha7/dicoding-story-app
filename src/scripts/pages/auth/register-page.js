@@ -82,6 +82,23 @@ class RegisterPage {
     const form = document.querySelector('#register-form');
     if (!form) return;
 
+    const nameInput = document.querySelector('#register-name');
+    const emailInput = document.querySelector('#register-email');
+    const passwordInput = document.querySelector('#register-password');
+
+    nameInput?.addEventListener('input', () => {
+      if (nameInput.value.trim().length > 0) this.clearFeedback();
+    });
+
+    emailInput?.addEventListener('input', () => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailRegex.test(emailInput.value.trim())) this.clearFeedback();
+    });
+
+    passwordInput?.addEventListener('input', () => {
+      if (passwordInput.value.length >= 8) this.clearFeedback();
+    });
+
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const name = document.querySelector('#register-name')?.value || '';

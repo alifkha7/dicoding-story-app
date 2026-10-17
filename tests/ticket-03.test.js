@@ -74,7 +74,7 @@ describe('Ticket 03 Unit Tests — HomePresenter', () => {
     expect(fakeView.showLoading).toHaveBeenCalled();
     expect(fakeStoryModel.getStories).toHaveBeenCalledWith({
       token: 'mock-token-xyz',
-      location: 1,
+      location: 0,
       size: 50,
     });
     expect(fakeView.renderStories).toHaveBeenCalledWith(mockStories);
