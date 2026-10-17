@@ -4,7 +4,7 @@
 
 **Blocked by:** 01: App Shell, Custom View Transitions, Accessibility Landmarks, & Core Models Prefactor, 02: Author Registration, Login, Logout, & Router Auth Guard
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [ ] Visiting `#/` fetches and displays the **Story Feed**, where each **Story** card renders the photo with a descriptive `alt` attribute, the **Author** name, the description, the formatted creation date, and **Story Location** metadata, along with loading and retryable error states.
 - [ ] All displayed **Stories** that include a valid **Story Location** are plotted as markers with rich popups (thumbnail, **Author** name, description excerpt, coordinates, and detail link) on a Leaflet map featuring a layer control with at least three keyless tile layers (per ADR-0002).
