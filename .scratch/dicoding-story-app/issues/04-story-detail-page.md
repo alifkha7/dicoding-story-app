@@ -4,7 +4,7 @@
 
 **Blocked by:** 01: App Shell, Custom View Transitions, Accessibility Landmarks, & Core Models Prefactor, 02: Author Registration, Login, Logout, & Router Auth Guard
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [ ] Navigating to `#/stories/:id` fetches the requested **Story** from the API and displays its full-resolution photo with descriptive `alt` text, **Author** name, formatted publication date, full description, and coordinate details, with accessible loading and error states.
 - [ ] When the **Story** has a valid **Story Location**, the detail view renders a dedicated Leaflet map with multi-tile layer control (per ADR-0002) centered on those coordinates with an open marker popup; when the **Story** has no coordinates, a clear accessible status message is shown instead.
