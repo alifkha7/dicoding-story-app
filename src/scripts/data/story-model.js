@@ -6,7 +6,10 @@ class StoryModel {
 
   constructor({ baseUrl = CONFIG.BASE_URL, fetchInstance = fetch } = {}) {
     this.#baseUrl = baseUrl;
-    this.#fetch = fetchInstance;
+    const globalContext = typeof window !== 'undefined' ? window : globalThis;
+    this.#fetch = typeof fetchInstance?.bind === 'function' && fetchInstance === fetch
+      ? fetchInstance.bind(globalContext)
+      : fetchInstance;
   }
 
   async register({ name, email, password }) {
