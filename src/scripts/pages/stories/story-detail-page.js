@@ -1,6 +1,7 @@
 import StoryDetailPresenter from './story-detail-presenter';
 import StoryModel from '../../data/story-model';
 import AuthModel from '../../data/auth-model';
+import Database from '../../data/database';
 import { parseActivePathname } from '../../routes/url-parser';
 import { createMultiTileMap } from '../../utils/map-helper';
 import { showFormattedDate } from '../../utils';
@@ -34,8 +35,21 @@ class StoryDetailPage {
             
             <div class="detail-body">
               <div class="detail-meta">
-                <span class="detail-author" id="detail-author"></span>
-                <time class="detail-date" id="detail-date"></time>
+                <div class="detail-meta-info">
+                  <span class="detail-author" id="detail-author"></span>
+                  <time class="detail-date" id="detail-date"></time>
+                </div>
+                <button
+                  type="button"
+                  id="detail-bookmark-btn"
+                  class="btn btn-sm btn-bookmark-toggle detail-bookmark-btn"
+                  aria-label="Simpan cerita ke bookmark"
+                  aria-pressed="false"
+                  title="Simpan ke bookmark"
+                >
+                  <span class="bookmark-icon" aria-hidden="true">★</span>
+                  <span class="bookmark-btn-label">Simpan Bookmark</span>
+                </button>
               </div>
               <h1 id="story-title" class="detail-title">Cerita Komunitas</h1>
               <p id="detail-description" class="detail-text"></p>
@@ -125,7 +139,48 @@ class StoryDetailPage {
       descEl.textContent = story.description || 'Tidak ada deskripsi.';
     }
 
+    const bookmarkBtn = document.querySelector('#detail-bookmark-btn');
+    if (bookmarkBtn) {
+      Database.isBookmarked(story.id)
+        .then((isSaved) => {
+          this.#updateBookmarkButtonState(bookmarkBtn, isSaved, story.name);
+        })
+        .catch((err) => console.error('Failed to get bookmark status:', err));
+
+      bookmarkBtn.onclick = async () => {
+        try {
+          const isSaved = await Database.isBookmarked(story.id);
+          if (isSaved) {
+            await Database.deleteBookmark(story.id);
+            this.#updateBookmarkButtonState(bookmarkBtn, false, story.name);
+          } else {
+            await Database.saveBookmark(story);
+            this.#updateBookmarkButtonState(bookmarkBtn, true, story.name);
+          }
+        } catch (err) {
+          console.error('Error toggling bookmark:', err);
+        }
+      };
+    }
+
     detailContainer.style.display = 'flex';
+  }
+
+  #updateBookmarkButtonState(btn, isSaved, storyName = '') {
+    const labelEl = btn.querySelector('.bookmark-btn-label');
+    if (isSaved) {
+      btn.classList.add('bookmarked');
+      btn.setAttribute('aria-pressed', 'true');
+      btn.setAttribute('aria-label', `Hapus cerita ${storyName} dari bookmark`);
+      btn.title = 'Hapus dari bookmark';
+      if (labelEl) labelEl.textContent = 'Tersimpan di Bookmark';
+    } else {
+      btn.classList.remove('bookmarked');
+      btn.setAttribute('aria-pressed', 'false');
+      btn.setAttribute('aria-label', `Simpan cerita ${storyName} ke bookmark`);
+      btn.title = 'Simpan ke bookmark';
+      if (labelEl) labelEl.textContent = 'Simpan Bookmark';
+    }
   }
 
   renderLocationMap({ lat, lon, name, description }) {

@@ -1,6 +1,7 @@
 import HomePresenter from './home-presenter';
 import StoryModel from '../../data/story-model';
 import AuthModel from '../../data/auth-model';
+import Database from '../../data/database';
 import { createMultiTileMap } from '../../utils/map-helper';
 import { showFormattedDate } from '../../utils';
 import L from 'leaflet';
@@ -180,6 +181,16 @@ class HomePage {
               loading="lazy"
               class="story-image"
             />
+            <button
+              type="button"
+              class="btn-bookmark-toggle card-bookmark-btn"
+              data-bookmark-id="${story.id}"
+              aria-label="Simpan cerita ${story.name} ke bookmark"
+              aria-pressed="false"
+              title="Simpan ke bookmark"
+            >
+              <span class="bookmark-icon" aria-hidden="true">★</span>
+            </button>
           </div>
           <div class="story-content">
             <div class="story-author-meta">
@@ -215,6 +226,48 @@ class HomePage {
         this.#presenter.selectActiveStory(id);
       });
     });
+
+    // Hydrate bookmark status and attach toggle handlers
+    this.#setupBookmarkButtons(stories, feedList);
+  }
+
+  async #setupBookmarkButtons(stories, feedList) {
+    try {
+      const savedList = await Database.getAllBookmarks();
+      const savedIds = new Set(savedList.map((b) => b.id));
+
+      feedList.querySelectorAll('.card-bookmark-btn').forEach((btn) => {
+        const id = btn.getAttribute('data-bookmark-id');
+        const story = stories.find((s) => s.id === id);
+
+        if (savedIds.has(id)) {
+          btn.classList.add('bookmarked');
+          btn.setAttribute('aria-pressed', 'true');
+          btn.setAttribute('aria-label', `Hapus cerita ${story?.name || ''} dari bookmark`);
+          btn.title = 'Hapus dari bookmark';
+        }
+
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const isSaved = await Database.isBookmarked(id);
+          if (isSaved) {
+            await Database.deleteBookmark(id);
+            btn.classList.remove('bookmarked');
+            btn.setAttribute('aria-pressed', 'false');
+            btn.setAttribute('aria-label', `Simpan cerita ${story?.name || ''} ke bookmark`);
+            btn.title = 'Simpan ke bookmark';
+          } else if (story) {
+            await Database.saveBookmark(story);
+            btn.classList.add('bookmarked');
+            btn.setAttribute('aria-pressed', 'true');
+            btn.setAttribute('aria-label', `Hapus cerita ${story?.name || ''} dari bookmark`);
+            btn.title = 'Hapus dari bookmark';
+          }
+        });
+      });
+    } catch (err) {
+      console.error('Failed to initialize card bookmarks:', err);
+    }
   }
 
   renderMapMarkers(locatedStories) {

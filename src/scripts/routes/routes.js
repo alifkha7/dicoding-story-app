@@ -4,6 +4,7 @@ import LoginPage from '../pages/auth/login-page';
 import RegisterPage from '../pages/auth/register-page';
 import StoryDetailPage from '../pages/stories/story-detail-page';
 import AddStoryPage from '../pages/stories/add-story-page';
+import FavoritesPage from '../pages/favorites/favorites-page';
 
 const routes = {
   '/': new HomePage(),
@@ -12,6 +13,7 @@ const routes = {
   '/register': new RegisterPage(),
   '/stories/:id': new StoryDetailPage(),
   '/add': new AddStoryPage(),
+  '/favorites': new FavoritesPage(),
 };
 
 export default routes;

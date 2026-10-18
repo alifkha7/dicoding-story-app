@@ -122,6 +122,7 @@ class App {
     if (isAuthenticated) {
       navList.innerHTML = `
         <li><a href="#/">Beranda</a></li>
+        <li><a href="#/favorites">Cerita Tersimpan</a></li>
         <li><a href="#/add">+ Tambah Cerita</a></li>
         <li><a href="#/about">Tentang</a></li>
         <li>
