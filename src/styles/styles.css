@@ -509,6 +509,7 @@ body {
 }
 
 .story-image-wrapper {
+  position: relative;
   width: 100%;
   height: 220px;
   background-color: #e5e7eb;
@@ -1015,3 +1016,261 @@ body {
     animation: none;
   }
 }
+
+/* Bookmark Buttons & Favorites Page Styles */
+.btn-bookmark-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-speed), color var(--transition-speed), background-color var(--transition-speed);
+}
+
+.card-bookmark-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
+  font-size: 1.25rem;
+  color: #9ca3af;
+  z-index: 5;
+}
+
+.card-bookmark-btn:hover {
+  transform: scale(1.1);
+  background: #ffffff;
+  color: #f59e0b;
+}
+
+.card-bookmark-btn.bookmarked {
+  color: #f59e0b;
+  background: #ffffff;
+}
+
+.detail-meta-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-bookmark-btn {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.detail-bookmark-btn .bookmark-icon {
+  color: #9ca3af;
+  font-size: 1.1rem;
+}
+
+.detail-bookmark-btn.bookmarked {
+  border-color: #f59e0b;
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.detail-bookmark-btn.bookmarked .bookmark-icon {
+  color: #f59e0b;
+}
+
+.detail-bookmark-btn:hover {
+  background: #f9fafb;
+}
+
+.detail-bookmark-btn.bookmarked:hover {
+  background: #fef3c7;
+}
+
+/* Favorites Page */
+.favorites-page {
+  padding-block: 16px;
+}
+
+.favorites-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+  .favorites-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.favorites-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .favorites-toolbar {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.search-box {
+  position: relative;
+  min-width: 260px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: var(--bg-card);
+  transition: border-color var(--transition-speed);
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+}
+
+.favorites-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 640px) {
+  .favorites-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .favorites-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.fav-action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-delete-bookmark {
+  background: transparent;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.btn-delete-bookmark:hover {
+  background: #fee2e2;
+  border-color: #dc2626;
+}
+
+/* Outbox Synchronization Toast Notification */
+.outbox-toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 380px;
+  pointer-events: none;
+}
+
+.outbox-toast {
+  pointer-events: auto;
+  background-color: #10b981;
+  color: #ffffff;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.4;
+  animation: slideInUp 0.3s ease-out;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.outbox-toast.fade-out {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Push Notification Toggle Button in Nav */
+.btn-push-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.btn-push-toggle:hover {
+  background-color: var(--secondary-color);
+  border-color: #cbd5e1;
+}
+
+.btn-push-toggle .push-status-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #94a3b8;
+  transition: background-color var(--transition-speed);
+}
+
+.btn-push-toggle.active {
+  border-color: #3b82f6;
+  color: #1d4ed8;
+  background-color: #eff6ff;
+}
+
+.btn-push-toggle.active .push-status-indicator {
+  background-color: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+

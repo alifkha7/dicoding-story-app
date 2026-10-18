@@ -5,11 +5,11 @@ Enable full Progressive Web App installability and instant application shell off
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** closed
 
-- [ ] Complete `manifest.webmanifest` with name, short name, start_url, standalone display, theme/background colors, 192x192 & 512x512 maskable icons, shortcuts, and wide/narrow screenshots.
-- [ ] Zero warnings in Chrome DevTools Application -> Manifest panel.
-- [ ] Configure `vite-plugin-pwa` with `InjectManifest` strategy targeting `src/sw.js`.
-- [ ] Implement `precacheAndRoute(self.__WB_MANIFEST)` in `src/sw.js` to cache build artifacts.
-- [ ] Register Service Worker cleanly in client startup without throwing or blocking initial DOM paint.
-- [ ] Verify application shell loads successfully in browser offline mode (Network -> Offline).
+- [x] Complete `manifest.webmanifest` with name, short name, start_url, standalone display, theme/background colors, 192x192 & 512x512 maskable icons, shortcuts, and wide/narrow screenshots.
+- [x] Zero warnings in Chrome DevTools Application -> Manifest panel.
+- [x] Configure `vite-plugin-pwa` with `InjectManifest` strategy targeting `src/sw.js`.
+- [x] Implement `precacheAndRoute(self.__WB_MANIFEST)` in `src/sw.js` to cache build artifacts.
+- [x] Register Service Worker cleanly in client startup without throwing or blocking initial DOM paint.
+- [x] Verify application shell loads successfully in browser offline mode (Network -> Offline).

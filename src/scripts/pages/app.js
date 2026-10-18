@@ -1,6 +1,7 @@
 import routes from '../routes/routes';
 import { getActiveRoute } from '../routes/url-parser';
 import StreamManager from '../utils/stream-manager';
+import PushManagerHelper from '../utils/push-manager';
 
 class App {
   #content = null;
@@ -9,13 +10,15 @@ class App {
   #skipLink = null;
   #currentPage = null;
   #authModel = null;
+  #pushManager = null;
 
-  constructor({ navigationDrawer, drawerButton, content, skipLink, authModel }) {
+  constructor({ navigationDrawer, drawerButton, content, skipLink, authModel, pushManager }) {
     this.#content = content;
     this.#drawerButton = drawerButton;
     this.#navigationDrawer = navigationDrawer;
     this.#skipLink = skipLink || document.querySelector('#skip-link');
     this.#authModel = authModel;
+    this.#pushManager = pushManager || new PushManagerHelper();
 
     this.#setupDrawer();
     this.#setupSkipLink();
@@ -122,14 +125,23 @@ class App {
     if (isAuthenticated) {
       navList.innerHTML = `
         <li><a href="#/">Beranda</a></li>
+        <li><a href="#/favorites">Cerita Tersimpan</a></li>
         <li><a href="#/add">+ Tambah Cerita</a></li>
         <li><a href="#/about">Tentang</a></li>
+        <li>
+          <button id="push-toggle-button" class="btn-push-toggle" aria-label="Aktifkan notifikasi web push" aria-pressed="false">
+            <span class="push-status-indicator" aria-hidden="true"></span>
+            <span class="push-status-label">Notifikasi: Mati</span>
+          </button>
+        </li>
         <li>
           <button id="logout-button" class="btn-logout" aria-label="Keluar dari akun">
             Keluar (${user?.name || 'User'})
           </button>
         </li>
       `;
+
+      this.#initPushToggleButton(navList);
 
       const logoutBtn = navList.querySelector('#logout-button');
       if (logoutBtn) {
@@ -147,6 +159,59 @@ class App {
         <li><a href="#/about">Tentang</a></li>
       `;
     }
+  }
+
+  async #initPushToggleButton(navList) {
+    const pushBtn = navList.querySelector('#push-toggle-button');
+    if (!pushBtn || !this.#pushManager) return;
+
+    if (!this.#pushManager.isSupported()) {
+      pushBtn.style.display = 'none';
+      return;
+    }
+
+    const updateButtonState = (isSubscribed) => {
+      const label = pushBtn.querySelector('.push-status-label');
+      if (isSubscribed) {
+        pushBtn.classList.add('active');
+        pushBtn.setAttribute('aria-pressed', 'true');
+        pushBtn.setAttribute('aria-label', 'Nonaktifkan notifikasi web push');
+        if (label) label.textContent = 'Notifikasi: Aktif';
+      } else {
+        pushBtn.classList.remove('active');
+        pushBtn.setAttribute('aria-pressed', 'false');
+        pushBtn.setAttribute('aria-label', 'Aktifkan notifikasi web push');
+        if (label) label.textContent = 'Notifikasi: Mati';
+      }
+    };
+
+    try {
+      const isSubscribed = await this.#pushManager.isSubscribed();
+      updateButtonState(isSubscribed);
+    } catch {
+      updateButtonState(false);
+    }
+
+    pushBtn.addEventListener('click', async () => {
+      pushBtn.disabled = true;
+      try {
+        const currentlySubscribed = await this.#pushManager.isSubscribed();
+        const token = this.#authModel ? this.#authModel.getToken() : null;
+
+        if (currentlySubscribed) {
+          await this.#pushManager.unsubscribe({ token });
+          updateButtonState(false);
+        } else {
+          await this.#pushManager.subscribe({ token });
+          updateButtonState(true);
+        }
+      } catch (err) {
+        console.error('Error toggling push notification subscription:', err);
+        alert(err.message || 'Gagal mengubah status langganan notifikasi.');
+      } finally {
+        pushBtn.disabled = false;
+      }
+    });
   }
 }
 
