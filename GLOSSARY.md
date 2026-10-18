@@ -1,6 +1,6 @@
 # Dicoding Story App
 
-A location-aware story-sharing platform where community members publish and explore visual stories with geographic context.
+A location-aware story-sharing platform where community members publish and explore visual stories with geographic context, complete with offline capabilities, push notifications, and local bookmarking.
 
 ## Language
 
@@ -31,3 +31,15 @@ _Avoid_: Focused post, current item
 **Location Filter**:
 The view mode on the Story Feed that controls whether all Stories or only Stories possessing a Story Location are displayed.
 _Avoid_: Map toggle, geo filter
+
+**Bookmarked Story**:
+A published Story saved by an Author into local IndexedDB storage for fast offline reading and personal curation.
+_Avoid_: Favorite item, saved post, pinned story
+
+**Story Outbox**:
+The local IndexedDB queue storing Draft Stories created while the client device is offline, waiting for automatic synchronization when connectivity is restored.
+_Avoid_: Offline queue, pending sync table, upload backlog
+
+**Push Subscription**:
+The endpoint and authentication keys negotiated between the browser's Service Worker and the Dicoding push service to deliver background Story alerts.
+_Avoid_: Notification channel, web hook, alert token
