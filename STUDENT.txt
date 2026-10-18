@@ -1,2 +1,2 @@
-APP_URL=https://story-app-dicoding.netlify.app/
+APP_URL=https://alifkha7.github.io/dicoding-story-app/
 MAP_SERVICE_API_KEY=- (Menggunakan Leaflet dengan OpenStreetMap, OpenTopoMap, dan Esri World Imagery tanpa API Key)
