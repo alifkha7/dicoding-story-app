@@ -9,13 +9,14 @@ Deliver background Story notifications and prepare the application for public ev
 - 03: IndexedDB Bookmarked Stories with Search, Filter, and CRUD Operations
 - 04: Story Outbox and Automatic Offline-to-Online Synchronization
 
-**Status:** ready-for-agent
+**Status:** closed
 
-- [ ] Implement VAPID key conversion helper (`urlBase64ToUint8Array`).
-- [ ] Implement `PushManager` service to handle permission requests, `pushManager.subscribe()`, and Dicoding Story API subscription endpoints.
-- [ ] Add accessible Push Notification toggle button in navigation header displaying current subscription state.
-- [ ] Implement `push` event listener in `src/sw.js` parsing dynamic payload (title, options: body, icon, badge, data with url).
-- [ ] Implement `notificationclick` event listener in `src/sw.js` navigating to `event.notification.data.url` (e.g. `#/stories/:id`).
-- [ ] Configure `public/_redirects` for Netlify (`/* /index.html 200`).
-- [ ] Build production bundle (`npm run build`) and verify PWA installability and deployment.
-- [ ] Record live deployment URL in `STUDENT.txt`.
+- [x] Implement VAPID key conversion helper (`urlBase64ToUint8Array`).
+- [x] Implement `PushManager` service to handle permission requests, `pushManager.subscribe()`, and Dicoding Story API subscription endpoints.
+- [x] Add accessible Push Notification toggle button in navigation header displaying current subscription state.
+- [x] Implement `push` event listener in `src/sw.js` parsing dynamic payload (title, options: body, icon, badge, data with url).
+- [x] Implement `notificationclick` event listener in `src/sw.js` navigating to `event.notification.data.url` (e.g. `#/stories/:id`).
+- [x] Configure `public/_redirects` for Netlify (`/* /index.html 200`).
+- [x] Build production bundle (`npm run build`) and verify PWA installability and deployment.
+- [x] Record live deployment URL in `STUDENT.txt`.
+
