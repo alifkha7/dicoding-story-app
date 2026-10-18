@@ -48,7 +48,7 @@ class LoginPage {
 
             <button type="submit" id="btn-login-submit" class="btn btn-primary btn-block">
               <span class="btn-text">Masuk</span>
-              <span class="btn-spinner" aria-hidden="true" style="display: none;">⏳</span>
+              <span class="btn-spinner" aria-hidden="true" style="display: none;">...</span>
             </button>
           </form>
 

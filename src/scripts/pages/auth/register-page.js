@@ -59,7 +59,7 @@ class RegisterPage {
 
             <button type="submit" id="btn-register-submit" class="btn btn-primary btn-block">
               <span class="btn-text">Daftar Sekarang</span>
-              <span class="btn-spinner" aria-hidden="true" style="display: none;">⏳</span>
+              <span class="btn-spinner" aria-hidden="true" style="display: none;">...</span>
             </button>
           </form>
 

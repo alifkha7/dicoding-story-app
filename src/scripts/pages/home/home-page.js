@@ -24,7 +24,7 @@ class HomePage {
               Semua Cerita
             </button>
             <button type="button" id="filter-located" class="btn btn-filter" aria-pressed="false">
-              📍 Dengan Lokasi Saja
+              Dengan Lokasi Saja
             </button>
           </div>
         </div>
@@ -183,8 +183,8 @@ class HomePage {
           </div>
           <div class="story-content">
             <div class="story-author-meta">
-              <span class="author-name">👤 ${story.name}</span>
-              <time datetime="${story.createdAt}" class="story-time">📅 ${formattedDate}</time>
+              <span class="author-name">${story.name}</span>
+              <time datetime="${story.createdAt}" class="story-time">${formattedDate}</time>
             </div>
             <p class="story-description">${story.description || 'Tidak ada deskripsi.'}</p>
             
@@ -196,7 +196,7 @@ class HomePage {
                   data-locate-id="${story.id}"
                   aria-label="Lihat lokasi cerita ${story.name} pada peta"
                 >
-                  📍 Lihat di Peta (${Number(story.lat).toFixed(2)}, ${Number(story.lon).toFixed(2)})
+                  Lihat di Peta (${Number(story.lat).toFixed(2)}, ${Number(story.lon).toFixed(2)})
                 </button>
               ` : `
                 <span class="no-location-badge">Tanpa Koordinat</span>
@@ -241,7 +241,7 @@ class HomePage {
         <div class="map-popup-card">
           <img src="${story.photoUrl}" alt="Foto ${story.name}" class="popup-thumb" />
           <h3 class="popup-author">${story.name}</h3>
-          <p class="popup-coords" style="font-size: 0.75rem; color: #6b7280; margin-bottom: 4px;">📍 Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}</p>
+          <p class="popup-coords" style="font-size: 0.75rem; color: #6b7280; margin-bottom: 4px;">Koordinat: ${lat.toFixed(4)}, ${lon.toFixed(4)}</p>
           <p class="popup-desc">${story.description ? story.description.slice(0, 80) : ''}...</p>
           <a href="#/stories/${story.id}" class="popup-link">Lihat Detail →</a>
         </div>

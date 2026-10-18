@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import AddStoryPresenter from '../src/scripts/pages/stories/add-story-presenter';
 
-describe('Ticket 05 Unit Tests — AddStoryPresenter', () => {
+describe('AddStoryPresenter Tests', () => {
   let fakeView;
   let fakeStoryModel;
   let fakeAuthModel;

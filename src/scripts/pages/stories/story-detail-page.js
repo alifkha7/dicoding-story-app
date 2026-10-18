@@ -46,7 +46,7 @@ class StoryDetailPage {
           <div class="detail-location-section" aria-labelledby="location-heading">
             <h2 id="location-heading" class="location-heading">Lokasi Cerita</h2>
             <div id="detail-no-location" class="no-location-box" style="display: none;">
-              <p>📍 Cerita ini dibagikan tanpa informasi koordinat lokasi.</p>
+              <p>Cerita ini dibagikan tanpa informasi koordinat lokasi.</p>
             </div>
             <div id="detail-map-wrapper" class="detail-map-card" style="display: none;">
               <div id="detail-map" class="detail-digital-map" tabindex="0" role="region" aria-label="Peta lokasi cerita Leaflet"></div>

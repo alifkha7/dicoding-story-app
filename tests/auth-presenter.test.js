@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import LoginPresenter from '../src/scripts/pages/auth/login-presenter';
 import RegisterPresenter from '../src/scripts/pages/auth/register-presenter';
 
-describe('Ticket 02 Unit Tests — Authentication Presenters', () => {
+describe('Authentication Presenters Tests', () => {
   let fakeView;
   let fakeStoryModel;
   let fakeAuthModel;

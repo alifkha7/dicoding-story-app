@@ -4,7 +4,7 @@ import StoryModel from '../src/scripts/data/story-model';
 import StreamManager from '../src/scripts/utils/stream-manager';
 import { getRoute } from '../src/scripts/routes/url-parser';
 
-describe('Ticket 01 Unit Tests', () => {
+describe('StoryModel and URL Parser Tests', () => {
   describe('url-parser', () => {
     it('should correctly parse standard routes', () => {
       expect(getRoute('/')).toBe('/');

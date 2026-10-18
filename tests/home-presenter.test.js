@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import HomePresenter from '../src/scripts/pages/home/home-presenter';
 
-describe('Ticket 03 Unit Tests — HomePresenter', () => {
+describe('HomePresenter Tests', () => {
   let fakeView;
   let fakeStoryModel;
   let fakeAuthModel;

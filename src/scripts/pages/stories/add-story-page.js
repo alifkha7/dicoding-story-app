@@ -32,10 +32,10 @@ class AddStoryPage {
 
               <div class="media-tabs" role="tablist" aria-label="Sumber foto cerita">
                 <button type="button" role="tab" id="tab-upload" class="tab-btn active" aria-selected="true" aria-controls="panel-upload">
-                  📁 Unggah Berkas
+                  Unggah Berkas
                 </button>
                 <button type="button" role="tab" id="tab-camera" class="tab-btn" aria-selected="false" aria-controls="panel-camera">
-                  📷 Ambil dari Kamera
+                  Ambil dari Kamera
                 </button>
               </div>
 
@@ -64,7 +64,7 @@ class AddStoryPage {
 
                   <div class="camera-action-buttons">
                     <button type="button" id="btn-start-camera" class="btn btn-secondary btn-sm">Buka Kamera</button>
-                    <button type="button" id="btn-capture-camera" class="btn btn-primary btn-sm" style="display: none;">📸 Ambil Foto</button>
+                    <button type="button" id="btn-capture-camera" class="btn btn-primary btn-sm" style="display: none;">Ambil Foto</button>
                     <button type="button" id="btn-close-camera" class="btn btn-secondary btn-sm" style="display: none;">Tutup Kamera</button>
                   </div>
                 </div>
@@ -130,10 +130,10 @@ class AddStoryPage {
 
               <div class="location-buttons-row">
                 <button type="button" id="btn-current-location" class="btn btn-secondary btn-sm">
-                  🎯 Gunakan Lokasi Saat Ini
+                  Gunakan Lokasi Saat Ini
                 </button>
                 <button type="button" id="btn-clear-location" class="btn btn-secondary btn-sm">
-                  ✖ Hapus Lokasi
+                  Hapus Lokasi
                 </button>
               </div>
 
@@ -144,7 +144,7 @@ class AddStoryPage {
 
             <button type="submit" id="btn-submit-story" class="btn btn-primary btn-block btn-lg">
               <span class="btn-text">Bagikan Cerita</span>
-              <span class="btn-spinner" aria-hidden="true" style="display: none;">⏳</span>
+              <span class="btn-spinner" aria-hidden="true" style="display: none;">...</span>
             </button>
           </div>
         </form>

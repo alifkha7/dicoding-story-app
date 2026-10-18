@@ -1,2 +1,2 @@
 APP_URL=http://localhost:5173/
-MAP_SERVICE_API_KEY=Tidak memerlukan API Key (Menggunakan Leaflet dengan 3 Tile Layer publik bebas kunci: OpenStreetMap Standard, OpenTopoMap, dan Esri World Imagery sesuai ADR-0002)
+MAP_SERVICE_API_KEY=- (Menggunakan Leaflet dengan OpenStreetMap, OpenTopoMap, dan Esri World Imagery tanpa API Key)
