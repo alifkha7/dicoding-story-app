@@ -2,9 +2,25 @@ import '../styles/styles.css';
 
 import App from './pages/app';
 import AuthModel from './data/auth-model';
+import StoryModel from './data/story-model';
+import OutboxSyncManager from './utils/outbox-sync-manager';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const authModel = new AuthModel();
+  const storyModel = new StoryModel();
+
+  const outboxSyncManager = new OutboxSyncManager({
+    storyModel,
+    authModel,
+  });
+  outboxSyncManager.init();
+
+  // If already online at startup, attempt initial sync for any previously queued drafts
+  if (typeof navigator !== 'undefined' && navigator.onLine) {
+    outboxSyncManager.syncPendingStories().catch((err) => {
+      console.warn('Initial outbox sync failed:', err);
+    });
+  }
 
   const app = new App({
     content: document.querySelector('#main-content'),

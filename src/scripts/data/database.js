@@ -62,6 +62,33 @@ const Database = {
     const bookmark = await this.getBookmark(id);
     return Boolean(bookmark);
   },
+
+  async queueDraftStory(draftData) {
+    if (!draftData) return null;
+    const db = await getDb();
+    const entry = {
+      ...draftData,
+      createdAt: draftData.createdAt || new Date().toISOString(),
+    };
+    return db.add(OUTBOX_STORE_NAME, entry);
+  },
+
+  async getAllPendingStories() {
+    const db = await getDb();
+    const results = await db.getAll(OUTBOX_STORE_NAME);
+    return results || [];
+  },
+
+  async removePendingStory(outboxId) {
+    if (outboxId === undefined || outboxId === null) return;
+    const db = await getDb();
+    return db.delete(OUTBOX_STORE_NAME, outboxId);
+  },
+
+  async getPendingStoryCount() {
+    const db = await getDb();
+    return db.count(OUTBOX_STORE_NAME);
+  },
 };
 
 export default Database;

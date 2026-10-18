@@ -1,12 +1,16 @@
+import Database from '../../data/database';
+
 class AddStoryPresenter {
   #view = null;
   #storyModel = null;
   #authModel = null;
+  #database = null;
 
-  constructor({ view, storyModel, authModel }) {
+  constructor({ view, storyModel, authModel, database = Database }) {
     this.#view = view;
     this.#storyModel = storyModel;
     this.#authModel = authModel;
+    this.#database = database;
   }
 
   async submitDraftStory({ description, photoBlob, lat, lon }) {
@@ -49,6 +53,23 @@ class AddStoryPresenter {
     try {
       this.#view.showLoading();
       this.#view.clearFeedback();
+
+      const isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
+
+      if (!isOnline) {
+        await this.#database.queueDraftStory({
+          description: description.trim(),
+          photo: photoBlob,
+          lat: parsedLat,
+          lon: parsedLon,
+        });
+
+        this.#view.showSuccess(
+          'Koneksi offline: Cerita berhasil disimpan ke antrean lokal (outbox) dan akan diunggah otomatis saat kembali online.'
+        );
+        this.#view.navigateToHome();
+        return { success: true, isOfflineQueued: true };
+      }
 
       const token = this.#authModel.getToken();
 
