@@ -117,7 +117,7 @@ class StoryDetailPage {
     }
 
     if (dateEl) {
-      dateEl.textContent = `📅 ${showFormattedDate(story.createdAt, 'id-ID')}`;
+      dateEl.textContent = showFormattedDate(story.createdAt, 'id-ID');
       dateEl.setAttribute('datetime', story.createdAt);
     }
 
