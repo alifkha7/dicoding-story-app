@@ -1,7 +1,6 @@
 import StoryDetailPresenter from './story-detail-presenter';
 import StoryModel from '../../data/story-model';
 import AuthModel from '../../data/auth-model';
-import Database from '../../data/database';
 import { parseActivePathname } from '../../routes/url-parser';
 import { createMultiTileMap } from '../../utils/map-helper';
 import { showFormattedDate } from '../../utils';
@@ -141,7 +140,7 @@ class StoryDetailPage {
 
     const bookmarkBtn = document.querySelector('#detail-bookmark-btn');
     if (bookmarkBtn) {
-      Database.isBookmarked(story.id)
+      this.#presenter.isBookmarked(story.id)
         .then((isSaved) => {
           this.#updateBookmarkButtonState(bookmarkBtn, isSaved, story.name);
         })
@@ -149,14 +148,8 @@ class StoryDetailPage {
 
       bookmarkBtn.onclick = async () => {
         try {
-          const isSaved = await Database.isBookmarked(story.id);
-          if (isSaved) {
-            await Database.deleteBookmark(story.id);
-            this.#updateBookmarkButtonState(bookmarkBtn, false, story.name);
-          } else {
-            await Database.saveBookmark(story);
-            this.#updateBookmarkButtonState(bookmarkBtn, true, story.name);
-          }
+          const isNowSaved = await this.#presenter.toggleBookmark(story);
+          this.#updateBookmarkButtonState(bookmarkBtn, isNowSaved, story.name);
         } catch (err) {
           console.error('Error toggling bookmark:', err);
         }

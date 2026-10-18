@@ -5,12 +5,20 @@ class AddStoryPresenter {
   #storyModel = null;
   #authModel = null;
   #database = null;
+  #networkStatus = null;
 
-  constructor({ view, storyModel, authModel, database = Database }) {
+  constructor({
+    view,
+    storyModel,
+    authModel,
+    database = Database,
+    networkStatus = () => (typeof navigator !== 'undefined' ? navigator.onLine : true),
+  }) {
     this.#view = view;
     this.#storyModel = storyModel;
     this.#authModel = authModel;
     this.#database = database;
+    this.#networkStatus = networkStatus;
   }
 
   async submitDraftStory({ description, photoBlob, lat, lon }) {
@@ -54,7 +62,7 @@ class AddStoryPresenter {
       this.#view.showLoading();
       this.#view.clearFeedback();
 
-      const isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
+      const isOnline = Boolean(this.#networkStatus());
 
       if (!isOnline) {
         await this.#database.queueDraftStory({

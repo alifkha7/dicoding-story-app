@@ -164,7 +164,8 @@ self.addEventListener('push', (event) => {
       icon: '/images/icons/icon-192x192.png',
       badge: '/images/icons/icon-192x192.png',
       data: {
-        url: '#/',
+        url: '/#/',
+        storyId: null,
       },
     },
   };
@@ -172,6 +173,13 @@ self.addEventListener('push', (event) => {
   if (event.data) {
     try {
       const payload = event.data.json();
+      const storyId = payload.storyId || payload.data?.storyId || payload.options?.data?.storyId || null;
+      const targetUrl =
+        payload.options?.data?.url ||
+        payload.data?.url ||
+        payload.url ||
+        (storyId ? `/#/stories/${storyId}` : '/#/');
+
       notificationData = {
         title: payload.title || notificationData.title,
         options: {
@@ -179,7 +187,8 @@ self.addEventListener('push', (event) => {
           icon: payload.options?.icon || payload.icon || notificationData.options.icon,
           badge: payload.options?.badge || payload.badge || notificationData.options.badge,
           data: {
-            url: payload.options?.data?.url || payload.data?.url || payload.url || '#/',
+            url: targetUrl,
+            storyId,
           },
         },
       };
@@ -199,7 +208,11 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
-  const targetUrl = event.notification.data?.url || '#/';
+  const data = event.notification.data || {};
+  const url = data.url;
+  const storyId = data.storyId;
+  const rawTarget = url || (storyId ? `/#/stories/${storyId}` : '/#/');
+  const targetUrl = new URL(rawTarget, self.location.origin).href;
 
   event.waitUntil(
     clients

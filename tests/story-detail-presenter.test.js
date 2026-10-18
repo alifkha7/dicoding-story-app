@@ -124,4 +124,35 @@ describe('StoryDetailPresenter Tests', () => {
     expect(fakeView.showError).toHaveBeenCalledWith('Story not found');
     expect(fakeView.hideLoading).toHaveBeenCalled();
   });
+
+  it('should manage bookmarks via presenter with injected database', async () => {
+    const fakeDatabase = {
+      isBookmarked: vi.fn().mockResolvedValue(false),
+      saveBookmark: vi.fn().mockResolvedValue(undefined),
+      deleteBookmark: vi.fn().mockResolvedValue(undefined),
+    };
+
+    const presenter = new StoryDetailPresenter({
+      view: fakeView,
+      storyModel: fakeStoryModel,
+      authModel: fakeAuthModel,
+      database: fakeDatabase,
+    });
+
+    // Check isBookmarked
+    const isSaved = await presenter.isBookmarked('story-123');
+    expect(isSaved).toBe(false);
+    expect(fakeDatabase.isBookmarked).toHaveBeenCalledWith('story-123');
+
+    // Toggle bookmark when not saved -> saves and returns true
+    const toggleResult1 = await presenter.toggleBookmark(mockStoryWithLoc);
+    expect(toggleResult1).toBe(true);
+    expect(fakeDatabase.saveBookmark).toHaveBeenCalledWith(mockStoryWithLoc);
+
+    // Toggle bookmark when saved -> deletes and returns false
+    fakeDatabase.isBookmarked.mockResolvedValue(true);
+    const toggleResult2 = await presenter.toggleBookmark(mockStoryWithLoc);
+    expect(toggleResult2).toBe(false);
+    expect(fakeDatabase.deleteBookmark).toHaveBeenCalledWith('story-123');
+  });
 });

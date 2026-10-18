@@ -33,6 +33,14 @@ class FavoritesPage {
                 Dengan Lokasi Saja
               </button>
             </div>
+
+            <div class="sort-controls">
+              <label for="sort-select" class="sort-label">Urutkan:</label>
+              <select id="sort-select" class="form-input sort-select" aria-label="Urutkan cerita tersimpan">
+                <option value="newest" selected>Terbaru</option>
+                <option value="oldest">Terlama</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -64,6 +72,7 @@ class FavoritesPage {
     const searchInput = document.querySelector('#search-input');
     const btnAll = document.querySelector('#fav-filter-all');
     const btnLocated = document.querySelector('#fav-filter-located');
+    const sortSelect = document.querySelector('#sort-select');
 
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
@@ -82,6 +91,12 @@ class FavoritesPage {
       btnLocated.addEventListener('click', () => {
         this.updateFilterUI('located');
         this.#presenter.filterBookmarks('located');
+      });
+    }
+
+    if (sortSelect) {
+      sortSelect.addEventListener('change', (e) => {
+        this.#presenter.sortBookmarks(e.target.value);
       });
     }
 

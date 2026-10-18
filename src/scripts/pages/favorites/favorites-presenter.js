@@ -4,6 +4,7 @@ class FavoritesPresenter {
   #bookmarks = [];
   #searchQuery = '';
   #locationFilter = 'all'; // 'all' | 'located'
+  #sortBy = 'newest'; // 'newest' | 'oldest'
 
   constructor({ view, database }) {
     this.#view = view;
@@ -29,6 +30,11 @@ class FavoritesPresenter {
 
   filterBookmarks(locationFilter) {
     this.#locationFilter = locationFilter;
+    this.#applyFilterAndSearch();
+  }
+
+  sortBookmarks(order) {
+    this.#sortBy = order === 'oldest' ? 'oldest' : 'newest';
     this.#applyFilterAndSearch();
   }
 
@@ -63,6 +69,12 @@ class FavoritesPresenter {
       });
     }
 
+    result.sort((a, b) => {
+      const timeA = new Date(a.createdAt || 0).getTime();
+      const timeB = new Date(b.createdAt || 0).getTime();
+      return this.#sortBy === 'oldest' ? timeA - timeB : timeB - timeA;
+    });
+
     if (result.length === 0) {
       this.#view.showEmptyState();
     } else {
@@ -80,6 +92,10 @@ class FavoritesPresenter {
 
   getLocationFilter() {
     return this.#locationFilter;
+  }
+
+  getSortBy() {
+    return this.#sortBy;
   }
 }
 

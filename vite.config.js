@@ -25,7 +25,7 @@ export default defineConfig({
         name: 'Story App — Berbagi Cerita',
         short_name: 'Story App',
         description: 'Dicoding Story App - Berbagi cerita dan eksplorasi lokasi cerita seputar komunitas Dicoding.',
-        start_url: '#/',
+        start_url: '/#/',
         display: 'standalone',
         background_color: '#f8f9fa',
         theme_color: '#2563eb',

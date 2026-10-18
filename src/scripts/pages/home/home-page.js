@@ -1,7 +1,6 @@
 import HomePresenter from './home-presenter';
 import StoryModel from '../../data/story-model';
 import AuthModel from '../../data/auth-model';
-import Database from '../../data/database';
 import { createMultiTileMap } from '../../utils/map-helper';
 import { showFormattedDate } from '../../utils';
 import L from 'leaflet';
@@ -233,7 +232,7 @@ class HomePage {
 
   async #setupBookmarkButtons(stories, feedList) {
     try {
-      const savedList = await Database.getAllBookmarks();
+      const savedList = await this.#presenter.getAllBookmarks();
       const savedIds = new Set(savedList.map((b) => b.id));
 
       feedList.querySelectorAll('.card-bookmark-btn').forEach((btn) => {
@@ -249,19 +248,18 @@ class HomePage {
 
         btn.addEventListener('click', async (e) => {
           e.stopPropagation();
-          const isSaved = await Database.isBookmarked(id);
-          if (isSaved) {
-            await Database.deleteBookmark(id);
-            btn.classList.remove('bookmarked');
-            btn.setAttribute('aria-pressed', 'false');
-            btn.setAttribute('aria-label', `Simpan cerita ${story?.name || ''} ke bookmark`);
-            btn.title = 'Simpan ke bookmark';
-          } else if (story) {
-            await Database.saveBookmark(story);
+          if (!story) return;
+          const isNowSaved = await this.#presenter.toggleBookmark(story);
+          if (isNowSaved) {
             btn.classList.add('bookmarked');
             btn.setAttribute('aria-pressed', 'true');
             btn.setAttribute('aria-label', `Hapus cerita ${story?.name || ''} dari bookmark`);
             btn.title = 'Hapus dari bookmark';
+          } else {
+            btn.classList.remove('bookmarked');
+            btn.setAttribute('aria-pressed', 'false');
+            btn.setAttribute('aria-label', `Simpan cerita ${story?.name || ''} ke bookmark`);
+            btn.title = 'Simpan ke bookmark';
           }
         });
       });

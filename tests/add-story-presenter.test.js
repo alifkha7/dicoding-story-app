@@ -158,4 +158,36 @@ describe('AddStoryPresenter Tests', () => {
     expect(fakeView.navigateToHome).toHaveBeenCalled();
     expect(fakeView.hideLoading).toHaveBeenCalled();
   });
+
+  it('should divert to offline queue when injected networkStatus returns false', async () => {
+    const fakeDatabase = {
+      queueDraftStory: vi.fn().mockResolvedValue(999),
+    };
+
+    const presenter = new AddStoryPresenter({
+      view: fakeView,
+      storyModel: fakeStoryModel,
+      authModel: fakeAuthModel,
+      database: fakeDatabase,
+      networkStatus: () => false,
+    });
+
+    const result = await presenter.submitDraftStory({
+      description: 'Cerita offline via custom networkStatus.',
+      photoBlob: validPhoto,
+      lat: '-6.2088',
+      lon: '106.8456',
+    });
+
+    expect(result).toEqual({ success: true, isOfflineQueued: true });
+    expect(fakeDatabase.queueDraftStory).toHaveBeenCalledWith({
+      description: 'Cerita offline via custom networkStatus.',
+      photo: validPhoto,
+      lat: -6.2088,
+      lon: 106.8456,
+    });
+    expect(fakeStoryModel.addStory).not.toHaveBeenCalled();
+    expect(fakeView.showSuccess).toHaveBeenCalledWith(expect.stringContaining('Koneksi offline'));
+    expect(fakeView.navigateToHome).toHaveBeenCalled();
+  });
 });

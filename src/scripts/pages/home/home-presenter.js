@@ -1,15 +1,19 @@
+import Database from '../../data/database';
+
 class HomePresenter {
   #view = null;
   #storyModel = null;
   #authModel = null;
+  #database = null;
   #stories = [];
   #locationFilter = 'all'; // 'all' | 'located'
   #activeStoryId = null;
 
-  constructor({ view, storyModel, authModel }) {
+  constructor({ view, storyModel, authModel, database = Database }) {
     this.#view = view;
     this.#storyModel = storyModel;
     this.#authModel = authModel;
+    this.#database = database;
   }
 
   async loadStories() {
@@ -63,6 +67,28 @@ class HomePresenter {
 
   getLocationFilter() {
     return this.#locationFilter;
+  }
+
+  async isBookmarked(id) {
+    if (!this.#database || !id) return false;
+    return this.#database.isBookmarked(id);
+  }
+
+  async toggleBookmark(story) {
+    if (!this.#database || !story || !story.id) return false;
+    const isSaved = await this.#database.isBookmarked(story.id);
+    if (isSaved) {
+      await this.#database.deleteBookmark(story.id);
+      return false; // now not bookmarked
+    } else {
+      await this.#database.saveBookmark(story);
+      return true; // now bookmarked
+    }
+  }
+
+  async getAllBookmarks() {
+    if (!this.#database) return [];
+    return this.#database.getAllBookmarks();
   }
 }
 

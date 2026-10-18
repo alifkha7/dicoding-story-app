@@ -1,6 +1,6 @@
 import { openDB } from 'idb';
 
-const DATABASE_NAME = 'dicoding-story-db';
+const DATABASE_NAME = 'story-app-db';
 const DATABASE_VERSION = 1;
 const BOOKMARK_STORE_NAME = 'bookmarked_stories';
 const OUTBOX_STORE_NAME = 'story_outbox';
@@ -77,6 +77,10 @@ const Database = {
     const db = await getDb();
     const results = await db.getAll(OUTBOX_STORE_NAME);
     return results || [];
+  },
+
+  async getPendingStories() {
+    return this.getAllPendingStories();
   },
 
   async removePendingStory(outboxId) {

@@ -160,7 +160,11 @@ describe('FavoritesPresenter Tests', () => {
 
     expect(fakeView.showLoading).toHaveBeenCalled();
     expect(fakeDatabase.getAllBookmarks).toHaveBeenCalled();
-    expect(fakeView.renderBookmarks).toHaveBeenCalledWith(mockBookmarks);
+    expect(fakeView.renderBookmarks).toHaveBeenCalledWith([
+      mockBookmarks[2],
+      mockBookmarks[1],
+      mockBookmarks[0],
+    ]);
     expect(fakeView.hideLoading).toHaveBeenCalled();
   });
 
@@ -214,9 +218,13 @@ describe('FavoritesPresenter Tests', () => {
     presenter.searchBookmarks('nonexistent-keyword');
     expect(fakeView.showEmptyState).toHaveBeenCalled();
 
-    // Clear search returns full list
+    // Clear search returns full list sorted newest first
     presenter.searchBookmarks('');
-    expect(fakeView.renderBookmarks).toHaveBeenLastCalledWith(mockBookmarks);
+    expect(fakeView.renderBookmarks).toHaveBeenLastCalledWith([
+      mockBookmarks[2],
+      mockBookmarks[1],
+      mockBookmarks[0],
+    ]);
   });
 
   it('should filter bookmarks by location status', async () => {
@@ -227,13 +235,17 @@ describe('FavoritesPresenter Tests', () => {
 
     await presenter.loadBookmarks();
 
-    // Filter to only located stories
+    // Filter to only located stories (sorted newest: story-3, story-1)
     presenter.filterBookmarks('located');
-    expect(fakeView.renderBookmarks).toHaveBeenLastCalledWith([mockBookmarks[0], mockBookmarks[2]]);
+    expect(fakeView.renderBookmarks).toHaveBeenLastCalledWith([mockBookmarks[2], mockBookmarks[0]]);
 
-    // Filter back to all
+    // Filter back to all (sorted newest: story-3, story-2, story-1)
     presenter.filterBookmarks('all');
-    expect(fakeView.renderBookmarks).toHaveBeenLastCalledWith(mockBookmarks);
+    expect(fakeView.renderBookmarks).toHaveBeenLastCalledWith([
+      mockBookmarks[2],
+      mockBookmarks[1],
+      mockBookmarks[0],
+    ]);
   });
 
   it('should combine search query and location filter', async () => {
@@ -270,7 +282,7 @@ describe('FavoritesPresenter Tests', () => {
 
     expect(fakeDatabase.deleteBookmark).toHaveBeenCalledWith('story-1');
     expect(fakeDatabase.getAllBookmarks).toHaveBeenCalledTimes(2);
-    expect(fakeView.renderBookmarks).toHaveBeenLastCalledWith([mockBookmarks[1], mockBookmarks[2]]);
+    expect(fakeView.renderBookmarks).toHaveBeenLastCalledWith([mockBookmarks[2], mockBookmarks[1]]);
   });
 
   it('should handle error when removing bookmark fails', async () => {
@@ -285,5 +297,48 @@ describe('FavoritesPresenter Tests', () => {
     await presenter.removeBookmark('story-1');
 
     expect(fakeView.showError).toHaveBeenCalledWith('Failed to delete');
+  });
+
+  it('should sort bookmarks by newest (default) and oldest', async () => {
+    const presenter = new FavoritesPresenter({
+      view: fakeView,
+      database: fakeDatabase,
+    });
+
+    await presenter.loadBookmarks();
+
+    // Default sorting is newest first: story-3 (Jan 3), story-2 (Jan 2), story-1 (Jan 1)
+    expect(fakeView.renderBookmarks).toHaveBeenCalledWith([
+      mockBookmarks[2],
+      mockBookmarks[1],
+      mockBookmarks[0],
+    ]);
+    expect(presenter.getSortBy()).toBe('newest');
+
+    // Change sorting to oldest first: story-1, story-2, story-3
+    presenter.sortBookmarks('oldest');
+    expect(presenter.getSortBy()).toBe('oldest');
+    expect(fakeView.renderBookmarks).toHaveBeenLastCalledWith([
+      mockBookmarks[0],
+      mockBookmarks[1],
+      mockBookmarks[2],
+    ]);
+
+    // Switch back to newest
+    presenter.sortBookmarks('newest');
+    expect(presenter.getSortBy()).toBe('newest');
+    expect(fakeView.renderBookmarks).toHaveBeenLastCalledWith([
+      mockBookmarks[2],
+      mockBookmarks[1],
+      mockBookmarks[0],
+    ]);
+  });
+});
+
+describe('Database getPendingStories Alias', () => {
+  it('should have getPendingStories as an alias to getAllPendingStories', async () => {
+    expect(typeof Database.getPendingStories).toBe('function');
+    const pending = await Database.getPendingStories();
+    expect(Array.isArray(pending)).toBe(true);
   });
 });
