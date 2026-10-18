@@ -5,11 +5,11 @@ Enable reliable Draft Story composition and publishing when offline. If an Autho
 
 **Blocked by:** 03: IndexedDB Bookmarked Stories with Search, Filter, and CRUD Operations
 
-**Status:** ready-for-agent
+**Status:** closed
 
-- [ ] Add `story_outbox` object store with auto-incrementing `outboxId` to `dicoding-story-db`.
-- [ ] Provide database methods for queueing, fetching, and deleting outbox items.
-- [ ] Update `AddStoryPresenter` to detect offline status (`navigator.onLine === false`) and divert submission to `story_outbox`.
-- [ ] Build `OutboxSyncManager` that listens to `window.addEventListener('online')` and processes the outbox queue in FIFO order.
-- [ ] Display visual toast/notification when an offline story is successfully uploaded upon reconnect.
-- [ ] Unit tests verifying outbox queueing, offline diversion, and online event auto-upload.
+- [x] Add `story_outbox` object store with auto-incrementing `outboxId` to `dicoding-story-db`.
+- [x] Provide database methods for queueing, fetching, and deleting outbox items.
+- [x] Update `AddStoryPresenter` to detect offline status (`navigator.onLine === false`) and divert submission to `story_outbox`.
+- [x] Build `OutboxSyncManager` that listens to `window.addEventListener('online')` and processes the outbox queue in FIFO order.
+- [x] Display visual toast/notification when an offline story is successfully uploaded upon reconnect.
+- [x] Unit tests verifying outbox queueing, offline diversion, and online event auto-upload.
