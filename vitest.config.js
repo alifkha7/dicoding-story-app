@@ -5,7 +5,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    fileParallelism: false,
+    pool: 'vmThreads',
     testTimeout: 20000,
   },
   resolve: {

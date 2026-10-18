@@ -19,10 +19,10 @@ describe('PushManagerHelper and Web Push Utilities', () => {
     });
 
     it('should convert standard Dicoding VAPID public key without throwing', () => {
-      const vapidKey = 'BCCs_w-p5kKM-b8LpmHiVsmHiBMm_9sF9_v3nF2_7sI';
+      const vapidKey = 'BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk';
       const uint8 = urlBase64ToUint8Array(vapidKey);
       expect(uint8).toBeInstanceOf(Uint8Array);
-      expect(uint8.length).toBeGreaterThan(0);
+      expect(uint8.length).toBe(65);
     });
   });
 
