@@ -1232,4 +1232,45 @@ body {
   }
 }
 
+/* Push Notification Toggle Button in Nav */
+.btn-push-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.btn-push-toggle:hover {
+  background-color: var(--secondary-color);
+  border-color: #cbd5e1;
+}
+
+.btn-push-toggle .push-status-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #94a3b8;
+  transition: background-color var(--transition-speed);
+}
+
+.btn-push-toggle.active {
+  border-color: #3b82f6;
+  color: #1d4ed8;
+  background-color: #eff6ff;
+}
+
+.btn-push-toggle.active .push-status-indicator {
+  background-color: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
 

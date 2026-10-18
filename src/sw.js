@@ -152,3 +152,74 @@ setCatchHandler(async ({ request, url }) => {
 
   return Response.error();
 });
+
+// ==========================================
+// Web Push Notifications Handling
+// ==========================================
+self.addEventListener('push', (event) => {
+  let notificationData = {
+    title: 'Story Baru Telah Hadir!',
+    options: {
+      body: 'Ada cerita menarik yang baru saja dibagikan di komunitas Story App.',
+      icon: '/images/icons/icon-192x192.png',
+      badge: '/images/icons/icon-192x192.png',
+      data: {
+        url: '#/',
+      },
+    },
+  };
+
+  if (event.data) {
+    try {
+      const payload = event.data.json();
+      notificationData = {
+        title: payload.title || notificationData.title,
+        options: {
+          body: payload.options?.body || payload.body || notificationData.options.body,
+          icon: payload.options?.icon || payload.icon || notificationData.options.icon,
+          badge: payload.options?.badge || payload.badge || notificationData.options.badge,
+          data: {
+            url: payload.options?.data?.url || payload.data?.url || payload.url || '#/',
+          },
+        },
+      };
+    } catch {
+      const text = event.data.text();
+      if (text) {
+        notificationData.options.body = text;
+      }
+    }
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(notificationData.title, notificationData.options),
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  const targetUrl = event.notification.data?.url || '#/';
+
+  event.waitUntil(
+    clients
+      .matchAll({
+        type: 'window',
+        includeUncontrolled: true,
+      })
+      .then((clientList) => {
+        for (const client of clientList) {
+          if ('focus' in client) {
+            client.focus();
+            if ('navigate' in client && targetUrl) {
+              client.navigate(targetUrl);
+            }
+            return;
+          }
+        }
+        if (clients.openWindow) {
+          return clients.openWindow(targetUrl);
+        }
+      }),
+  );
+});
