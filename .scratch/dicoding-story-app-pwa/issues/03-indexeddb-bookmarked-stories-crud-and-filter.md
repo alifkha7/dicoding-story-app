@@ -7,9 +7,9 @@ Provide local bookmarking capabilities for community Stories backed by an Indexe
 
 **Status:** ready-for-agent
 
-- [ ] Initialize `dicoding-story-db` with `bookmarked_stories` object store using `idb`.
-- [ ] Provide Database Model methods: `saveBookmark(story)`, `getBookmark(id)`, `getAllBookmarks()`, `deleteBookmark(id)`, `isBookmarked(id)`.
-- [ ] Add bookmark toggle button with accessible labels and active state to Story Card and Story Detail views.
-- [ ] Build dedicated `FavoritesPage` and `FavoritesPresenter` mounted at `#/favorites`.
-- [ ] Implement live client-side search input and location filter ("Semua" vs "Dengan Lokasi") on the favorites view.
-- [ ] Unit tests for `FavoritesPresenter` and database operations covering bookmark CRUD and filtering.
+- [x] Initialize `dicoding-story-db` with `bookmarked_stories` object store using `idb`.
+- [x] Provide Database Model methods: `saveBookmark(story)`, `getBookmark(id)`, `getAllBookmarks()`, `deleteBookmark(id)`, `isBookmarked(id)`.
+- [x] Add bookmark toggle button with accessible labels and active state to Story Card and Story Detail views.
+- [x] Build dedicated `FavoritesPage` and `FavoritesPresenter` mounted at `#/favorites`.
+- [x] Implement live client-side search input and location filter ("Semua" vs "Dengan Lokasi") on the favorites view.
+- [x] Unit tests for `FavoritesPresenter` and database operations covering bookmark CRUD and filtering.
