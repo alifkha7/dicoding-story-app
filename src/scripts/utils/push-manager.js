@@ -47,19 +47,26 @@ class PushManagerHelper {
 
   async getRegistration(timeoutMs = 5000) {
     if (!this.isSupported()) return null;
+    let timerId = null;
     try {
       const readyPromise = navigator.serviceWorker.ready;
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Timeout menunggu Service Worker siap.')), timeoutMs),
-      );
+      const timeoutPromise = new Promise((_, reject) => {
+        timerId = setTimeout(() => reject(new Error('Timeout menunggu Service Worker siap.')), timeoutMs);
+      });
       return await Promise.race([readyPromise, timeoutPromise]);
     } catch (err) {
-      console.warn('getRegistration fallback triggered:', err);
+      if (typeof process === 'undefined' || process.env?.NODE_ENV !== 'test') {
+        console.warn('getRegistration fallback triggered:', err);
+      }
       try {
         const reg = await navigator.serviceWorker.getRegistration?.();
         return reg || null;
       } catch {
         return null;
+      }
+    } finally {
+      if (timerId) {
+        clearTimeout(timerId);
       }
     }
   }
