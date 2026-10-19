@@ -22,6 +22,10 @@ export default defineConfig({
       srcDir: resolve(__dirname, 'src'),
       filename: 'sw.js',
       injectRegister: null,
+      devOptions: {
+        enabled: true,
+        type: 'module',
+      },
       manifest: {
         name: 'Story App — Berbagi Cerita',
         short_name: 'Story App',

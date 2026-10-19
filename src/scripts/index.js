@@ -40,7 +40,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 window.addEventListener('load', async () => {
   if ('serviceWorker' in navigator) {
     try {
-      const registration = await navigator.serviceWorker.register('/sw.js');
+      const swUrl = `${import.meta.env.BASE_URL}sw.js`;
+      const swOptions = import.meta.env.DEV ? { type: 'module' } : {};
+      const registration = await navigator.serviceWorker.register(swUrl, swOptions);
       console.log('ServiceWorker registration successful with scope:', registration.scope);
     } catch (error) {
       console.error('ServiceWorker registration failed:', error);
