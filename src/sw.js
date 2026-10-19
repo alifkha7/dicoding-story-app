@@ -153,18 +153,27 @@ setCatchHandler(async ({ request, url }) => {
   return Response.error();
 });
 
+// Helper for resolving scope-relative assets and URLs on root or sub-paths
+function resolveScopeUrl(rawPath) {
+  if (!rawPath) return self.registration.scope;
+  if (/^https?:\/\//i.test(rawPath)) return rawPath;
+  const normalized = rawPath.startsWith('/') ? rawPath.slice(1) : rawPath;
+  return new URL(normalized, self.registration.scope).href;
+}
+
 // ==========================================
 // Web Push Notifications Handling
 // ==========================================
 self.addEventListener('push', (event) => {
+  const defaultIcon = resolveScopeUrl('images/icons/icon-192x192.png');
   let notificationData = {
     title: 'Story Baru Telah Hadir!',
     options: {
       body: 'Ada cerita menarik yang baru saja dibagikan di komunitas Story App.',
-      icon: '/images/icons/icon-192x192.png',
-      badge: '/images/icons/icon-192x192.png',
+      icon: defaultIcon,
+      badge: defaultIcon,
       data: {
-        url: '/#/',
+        url: '#/',
         storyId: null,
       },
     },
@@ -178,14 +187,17 @@ self.addEventListener('push', (event) => {
         payload.options?.data?.url ||
         payload.data?.url ||
         payload.url ||
-        (storyId ? `/#/stories/${storyId}` : '/#/');
+        (storyId ? `#/stories/${storyId}` : '#/');
+
+      const rawIcon = payload.options?.icon || payload.icon;
+      const rawBadge = payload.options?.badge || payload.badge;
 
       notificationData = {
         title: payload.title || notificationData.title,
         options: {
           body: payload.options?.body || payload.body || notificationData.options.body,
-          icon: payload.options?.icon || payload.icon || notificationData.options.icon,
-          badge: payload.options?.badge || payload.badge || notificationData.options.badge,
+          icon: rawIcon ? resolveScopeUrl(rawIcon) : defaultIcon,
+          badge: rawBadge ? resolveScopeUrl(rawBadge) : defaultIcon,
           data: {
             url: targetUrl,
             storyId,
@@ -211,8 +223,8 @@ self.addEventListener('notificationclick', (event) => {
   const data = event.notification.data || {};
   const url = data.url;
   const storyId = data.storyId;
-  const rawTarget = url || (storyId ? `/#/stories/${storyId}` : '/#/');
-  const targetUrl = new URL(rawTarget, self.location.origin).href;
+  const rawTarget = url || (storyId ? `#/stories/${storyId}` : '#/');
+  const targetUrl = resolveScopeUrl(rawTarget);
 
   event.waitUntil(
     clients
