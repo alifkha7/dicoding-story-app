@@ -45,9 +45,23 @@ class PushManagerHelper {
     );
   }
 
-  async getRegistration() {
+  async getRegistration(timeoutMs = 5000) {
     if (!this.isSupported()) return null;
-    return await navigator.serviceWorker.ready;
+    try {
+      const readyPromise = navigator.serviceWorker.ready;
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Timeout menunggu Service Worker siap.')), timeoutMs),
+      );
+      return await Promise.race([readyPromise, timeoutPromise]);
+    } catch (err) {
+      console.warn('getRegistration fallback triggered:', err);
+      try {
+        const reg = await navigator.serviceWorker.getRegistration?.();
+        return reg || null;
+      } catch {
+        return null;
+      }
+    }
   }
 
   async getSubscription() {

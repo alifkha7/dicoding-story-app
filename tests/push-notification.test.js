@@ -175,5 +175,40 @@ describe('PushManagerHelper and Web Push Utilities', () => {
         }),
       );
     });
+
+    it('should fallback to navigator.serviceWorker.getRegistration when ready times out', async () => {
+      const fallbackRegistration = {
+        pushManager: {
+          getSubscription: vi.fn().mockResolvedValue(null),
+        },
+      };
+
+      window.PushManager = {};
+      window.Notification = {};
+      navigator.serviceWorker = {
+        ready: new Promise(() => {}), // Hanging promise that never resolves
+        getRegistration: vi.fn().mockResolvedValue(fallbackRegistration),
+      };
+
+      const helper = new PushManagerHelper();
+      const registration = await helper.getRegistration(50); // fast 50ms timeout for test
+
+      expect(registration).toBe(fallbackRegistration);
+      expect(navigator.serviceWorker.getRegistration).toHaveBeenCalled();
+    });
+
+    it('should return null safely if ready times out and getRegistration yields null', async () => {
+      window.PushManager = {};
+      window.Notification = {};
+      navigator.serviceWorker = {
+        ready: new Promise(() => {}),
+        getRegistration: vi.fn().mockResolvedValue(null),
+      };
+
+      const helper = new PushManagerHelper();
+      const registration = await helper.getRegistration(50);
+
+      expect(registration).toBeNull();
+    });
   });
 });
